@@ -1,0 +1,135 @@
+<wt>
+	<set xpath="/items/item[@name='foodCanBeef']">
+        <property name="HoldType" value="40"/><!-- 31 = default, 40 = rock, 25 = pipebomb -->
+        <property name="DisplayType" value="food"/>
+        <property name="Meshfile" value="Items/Misc/parcelPrefab"/>
+        <property name="DropMeshfile" value="Items/Misc/sack_droppedPrefab"/>
+        <property name="Material" value="Mmetal"/>
+        <property name="Weight" value="5"/>
+        <property name="EconomicValue" value="60"/>
+        <property name="Stacknumber" value="50"/>
+        <property name="ThrowableDecoy" value="true"/>
+        <property class="Action0">
+            <property name="Class" value="Projectile"/>
+			<property name="Class" value="ThrowAway"/>
+			<property name="Delay" value="1.2"/>
+			<property name="Throw_strength_default" value="8"/>
+			<property name="Throw_strength_max" value="25"/>
+			<property name="Max_strain_time" value="1.5"/>
+			<property name="Sound_start" value="swoosh"/>
+            <property name="DamageEntity" value="10"/>
+            <property name="DamageBlock" value="120"/>
+            <property name="Explosion.ParticleIndex" value="7"/>
+            <property name="Velocity" value="3"/>
+            <property name="FlyTime" value="1"/>
+            <property name="LifeTime" value="4"/>
+            <property name="CollisionRadius" value="0.5"/>
+            <property name="DamageBonus.earth" value="0"/>
+        </property>
+        <property class="Action1">
+                <property name="Class" value="Eat"/>
+                <property name="Delay" value="1.0"/>
+                <property name="Use_time" value="..."/>
+                <property name="Sound_start" value="player_eating"/>
+                <property name="Create_item" value="drinkCanEmpty"/>
+        </property>
+        <property name="Group" value="Food/Cooking"/>
+<!-- This turns it into an item with quality...
+		<effect_group name="Base Effects">
+			<passive_effect name="BuffProcChance" operation="base_set" target="other" value="0.50" tags="buffInjuryStunned1"/>
+			<passive_effect name="BuffProcChance" operation="base_set" target="other" value="0.25" tags="buffInjuryStunned2"/>
+			<passive_effect name="BuffProcChance" operation="base_set" target="other" value="0.15" tags="buffInjuryKnockdown1"/>
+		</effect_group>
+-->
+		<effect_group tiered="false">
+			<triggered_effect trigger="onSelfSecondaryActionEnd" action="ModifyCVar" cvar="$foodAmountAdd" operation="add" value="15"/>
+			<triggered_effect trigger="onSelfSecondaryActionEnd" action="ModifyCVar" cvar="foodHealthAmount" operation="add" value="7"/>
+			<triggered_effect trigger="onSelfSecondaryActionEnd" action="AddBuff" target="self" buff="buffProcessConsumables"/>
+			<triggered_effect trigger="onSelfSecondaryActionEnd" action="AddBuff" target="self" buff="buffIllFoodPoisoning0">
+				<requirement name="RandomRoll" seed_type="Random" target="self" min_max="0,100" operation="LTE" value="5"/>
+			</triggered_effect>
+			<display_value name="FoodPoisoningRisk" value=".05" />
+				<passive_effect name="BuffProcChance" operation="base_set" target="other" value="0.50" tags="buffInjuryStunned1"/>
+				<passive_effect name="BuffProcChance" operation="base_set" target="other" value="0.25" tags="buffInjuryStunned2"/>
+				<passive_effect name="BuffProcChance" operation="base_set" target="other" value="0.15" tags="buffInjuryKnockdown1"/>
+		</effect_group>
+	</set>
+	
+	
+	
+<!--
+	<append xpath="/items">
+		<item name="wtAmmoFoodCan">
+	        <property name="HoldType" value="45"/>
+			<property name="Meshfile" value="Items/Misc/sackPrefab"/>
+			<property name="DropMeshfile" value="Items/Misc/sack_droppedPrefab"/>
+			<property name="Material" value="Mmetal"/>
+			<property name="CreativeMode" value="None"/>
+			<property name="Group" value="Ammo/Weapons"/>
+			<property class="Action1">
+                <property name="Class" value="Projectile"/>
+                <property name="DamageEntity" value="10"/>
+                <property name="DamageBlock" value="120"/>
+                <property name="Explosion.ParticleIndex" value="7"/>
+                <property name="Velocity" value="18"/>
+                <property name="FlyTime" value="2"/>
+                <property name="LifeTime" value="4"/>
+                <property name="CollisionRadius" value="0.5"/>
+                <property name="DamageBonus.earth" value="0"/>
+			</property>
+			<effect_group name="Base Effects">
+				<passive_effect name="ModSlots" operation="base_set" value="0"/>
+				<passive_effect name="BuffProcChance" operation="base_set" value="0.50" tags="buffInjuryStunned1"/>
+				<passive_effect name="BuffProcChance" operation="base_set" value="0.25" tags="buffInjuryStunned2"/>
+				<passive_effect name="BuffProcChance" operation="base_set" value="0.15" tags="buffInjuryKnockdown1"/>
+			</effect_group>
+		</item>
+	</append>
+
+
+	<set xpath="/items/item[@name='foodCanBeef']/property[@name='HoldType']/@value">25</set>
+	<set xpath="/items/item[@name='foodCanBeef']/property[@class='Action0']">
+		<property name="Class" value="ThrowAway"/>
+		<property name="Magazine_items" value="wtAmmoFoodCan"/>
+		<property name="Delay" value="1.2"/>
+		<property name="Throw_strength_default" value="8"/>
+		<property name="Throw_strength_max" value="25"/>
+		<property name="Max_strain_time" value="1.5"/>
+		<property name="Sound_start" value="swoosh"/>
+	</set>
+	<set xpath="/items/item[@name='foodCanBeef']/effect_group[@tiered='false']">
+		<triggered_effect trigger="onSelfSecondaryActionEnd" action="ModifyCVar" cvar="$foodAmountAdd" operation="add" value="15"/>
+		<triggered_effect trigger="onSelfSecondaryActionEnd" action="ModifyCVar" cvar="foodHealthAmount" operation="add" value="7"/>
+		<triggered_effect trigger="onSelfSecondaryActionEnd" action="AddBuff" target="self" buff="buffProcessConsumables"/>
+		<triggered_effect trigger="onSelfSecondaryActionEnd" action="AddBuff" target="self" buff="buffIllFoodPoisoning0"/>
+		<display_value name="FoodPoisoningRisk" value="0.05" />
+	</set>
+	
+	<append xpath="/items/item[@name='foodCanBeef']">
+		<property name="ThrowableDecoy" value="true"/>
+        <property class="Action1">
+			<property name="Class" value="Eat"/>
+			<property name="Delay" value="1.0"/>
+			<property name="Use_time" value="..."/>
+			<property name="Sound_start" value="player_eating"/>
+			<property name="Create_item" value="drinkCanEmpty"/>
+        </property>
+		<effect_group name="Base Effects">
+			<passive_effect name="DamageFalloffRange" operation="base_set" value="15"/>
+			<passive_effect name="MaxRange" operation="base_set" value="35"/>
+			<passive_effect name="MagazineSize" operation="base_set" value="1"/>
+			<passive_effect name="EntityDamage" operation="perc_add" value="0"/>
+			<passive_effect name="BlockDamage" operation="perc_add" value="0"/>
+			<passive_effect name="SpreadDegreesVertical" operation="base_set" value="2.8"/>
+			<passive_effect name="SpreadDegreesHorizontal" operation="base_set" value="2.8"/>
+			<passive_effect name="SpreadMultiplierAiming" operation="base_set" value=".26"/>
+			<passive_effect name="SpreadMultiplierCrouching" operation="base_set" value=".8"/>
+			<passive_effect name="SpreadMultiplierWalking" operation="base_set" value="1.5"/>
+			<passive_effect name="SpreadMultiplierRunning" operation="base_set" value="2.2"/>
+			<passive_effect name="IncrementalSpreadMultiplier" operation="base_set" value="2"/>
+			<passive_effect name="RoundsPerMinute" operation="base_set" value="75"/>
+			<passive_effect name="ReloadSpeedMultiplier" operation="base_set" value=".5"/>
+		</effect_group>
+	</append>
+-->
+</wt>
